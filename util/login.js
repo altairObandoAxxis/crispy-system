@@ -15,12 +15,12 @@ export const newLogin = async ({ email, clave })=>{
         const response = await fetch(process.env.EXPO_PUBLIC_SIS11LOG, defaultOptions );        
         const responseJSON = await response.json();
         const { ok, msg, outData: { token }} = responseJSON;
-        console.log(responseJSON.outData);
         if(!ok) throw msg;
         await saveValueFor({ key: MOBILE_TOKEN, value: token });
-        await saveValueFor({ key: USER_INFO, value: responseJSON.outData });
-        return { ok: true, token };        
+        await saveValueFor({ key: USER_INFO, value: JSON.stringify(responseJSON.outData) });
+        return { ok: true, token, userInfo: responseJSON.outData };
     } catch (error) {
+        console.error(error);
         await saveValueFor({ key: MOBILE_TOKEN, value: '' });
         return { ok: false, token: '' }
     }

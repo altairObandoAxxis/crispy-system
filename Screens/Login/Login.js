@@ -33,12 +33,13 @@ export const Login =({ navigation })=>{
                 passRef.current.shake();
                 throw 'Password is required'
             }
-            const { ok } = await newLogin({ email: username, clave: password })
+            const { ok, token, userInfo } = await newLogin({ email: username, clave: password });
+            console.log('resultado', ok )
             if(!ok){
                 Alert.alert('Error', 'Username or password wrong');
                 return
             }
-            userContext.setData({ userLogged: true });
+            userContext.setData({ userLogged: ok, token, userInfo });
         } catch (error) {
             console.warn(error);
         }finally{
