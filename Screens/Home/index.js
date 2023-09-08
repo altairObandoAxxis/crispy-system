@@ -1,27 +1,39 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
 import { logout } from '../../util/login';
-import { useContext } from 'react';
 import { UserContext } from '../../util/UserContext';
+import PolicyList from '../../Components/LifePolicy/PolicyList';
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({ navigation }) => {
+    const userContext = React.useContext(UserContext);
+    const closeSession = ()=>{
+        logout();
+        userContext.setData({});
+    }
     return <View>
       <Text> Pagina de inicio </Text>
       <Button
         title='Go to details'
-        onPress={ logout }
+        onPress={ closeSession }
       />
     </View>
 }
   
 const ProfileScreen = ({ navigation, route }) => {
-    const userContext = useContext(UserContext);
+    const userContext = React.useContext(UserContext);
+    const closeSession = ()=>{
+        logout();
+        userContext.setData({});
+    }
     return <View>
-        <Text> { userContext.state.userInfo.nombre } </Text>
+      <Button
+        title='Close Session'
+        onPress={ closeSession }
+      />
     </View>
 }
 
@@ -35,11 +47,11 @@ export const IndexTabs = ()=>{
                 options={{
                     tabBarIcon : ({color, size }) =><AntDesign name='home' color={ color } size={ size } />,
                     tabBarShowLabel: false,
-                    headerTitle: 'Main'}}/>
+                headerTitle: 'Main'}}/>
             <Tab.Screen 
-                name='Claims' 
-                component={ ProfileScreen } 
-                options={{ tabBarIcon : ({color, size }) =><AntDesign name='medicinebox' color={ color } size={ size } />,
+                name='Policies' 
+                component={ PolicyList } 
+                options={{ tabBarIcon : ({color, size }) =><AntDesign name='Safety' color={ color } size={ size } />,
                 tabBarShowLabel: false}}/>
             <Tab.Screen 
                 name='Payments' 

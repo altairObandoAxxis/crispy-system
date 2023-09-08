@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator()
 
 export const LoginStack =()=> <NavigationContainer>
     <Stack.Navigator>
-        <Stack.Screen name='Login' component={ Login } options={{ title: 'Welcome to SISos', headerShown: true, headerTitleAlign:'center' }} />
+        <Stack.Screen name='Login' component={ Login } options={{ title: 'Welcome to SISos', headerShown: false, headerTitleAlign:'center' }} />
         <Stack.Screen name='CreateUser' component={ CreateUser } options={{ title: 'Register' }} />
         <Stack.Screen name='ForgotPassword' component={ ForgotPassword } options={{ title: 'Recover Password' }} />
     </Stack.Navigator>

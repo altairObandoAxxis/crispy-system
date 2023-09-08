@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Sis11Mobile",
-    "slug": "Sis11Mobile",
+    "slug": "sis11mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/sisIcon.png",
@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "config":{
+      "config": {
         "usesNonExemptEncryption": false
       }
     },
@@ -24,10 +24,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.altair_obando.sis11mobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "01ce9ae9-71e4-431e-812e-636b85a2e5ad"
+      }
+    },
+    "owner": "altair_obando"
   }
 }

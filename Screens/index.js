@@ -5,16 +5,20 @@ import { UserContext } from '../util/UserContext';
 import { getLoginToken, getUserInfo } from '../util/login';
 import { LoginStack    } from './Login/index'
 import { IndexTabs     } from './Home';
+import { GetContact } from '../commands/Contact';
 
 
 SplashScreen.preventAutoHideAsync();
 export const IndexStack = () => {
-  const userContext = React.useContext(UserContext);
+  const { state: userState, setData } = React.useContext(UserContext);
   const validateLogin = async () => {
     const token = await getLoginToken();
-    const user  = JSON.parse(await getUserInfo());
+    if(!token)
+      return;
+    const user  = await getUserInfo();
+    const contact = await GetContact();
     const logged = !(typeof token === 'undefined' || token === null || !token);
-    userContext.setData({ userLogged: logged, userInfo: user });
+    setData({ userLogged: logged, user, contact });
   };
 
   // Show splash art
@@ -33,8 +37,8 @@ export const IndexStack = () => {
   return (
     <View
         style={{ flex: 1 }}>
-        {userContext.state.userLogged  && <IndexTabs />}
-        {!userContext.state.userLogged && <LoginStack />}
+        {userState.userLogged  && <IndexTabs />}
+        {!userState.userLogged && <LoginStack />}
     </View>
   );
 };
