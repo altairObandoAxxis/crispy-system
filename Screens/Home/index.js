@@ -6,22 +6,9 @@ import { AntDesign } from '@expo/vector-icons';
 import { logout } from '../../util/login';
 import { UserContext } from '../../util/UserContext';
 import PolicyList from '../../Components/LifePolicy/PolicyList';
+import Dashboard from './Dashboard';
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = ({ navigation }) => {
-    const userContext = React.useContext(UserContext);
-    const closeSession = ()=>{
-        logout();
-        userContext.setData({});
-    }
-    return <View>
-      <Text> Pagina de inicio </Text>
-      <Button
-        title='Go to details'
-        onPress={ closeSession }
-      />
-    </View>
-}
   
 const ProfileScreen = ({ navigation, route }) => {
     const userContext = React.useContext(UserContext);
@@ -43,7 +30,7 @@ export const IndexTabs = ()=>{
         <Tab.Navigator screenOptions={{ headerLeft: ()=> <AntDesign name="appstore1" size={24} color="white" />, headerTintColor:'white', headerStyle:{ backgroundColor: 'rgb(0, 120, 212)' } }}>
             <Tab.Screen 
                 name='Home' 
-                component={ HomeScreen } 
+                component={ Dashboard } 
                 options={{
                     tabBarIcon : ({color, size }) =><AntDesign name='home' color={ color } size={ size } />,
                     tabBarShowLabel: false,
@@ -53,6 +40,12 @@ export const IndexTabs = ()=>{
                 component={ PolicyList } 
                 options={{ tabBarIcon : ({color, size }) =><AntDesign name='Safety' color={ color } size={ size } />,
                 tabBarShowLabel: false}}/>
+            <Tab.Screen 
+                name='Claims' 
+                component={ ProfileScreen }
+                options={{ tabBarIcon : ({color, size }) =><AntDesign name='warning' color={ color } size={ size } />,
+                tabBarShowLabel: false,
+                headerTitle:'Claims'}}/>
             <Tab.Screen 
                 name='Payments' 
                 component={ ProfileScreen }
