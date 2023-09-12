@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-import { View } from 'react-native';
 import { UserContext } from '../util/UserContext';
 import { getLoginToken, getUserInfo } from '../util/login';
 import { LoginStack    } from './Login/index'
 import { IndexTabs     } from './Home';
 import { GetContact } from '../commands/Contact';
+import { NavigationContainer } from '@react-navigation/native';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -35,10 +35,10 @@ export const IndexStack = () => {
     loadApp();
   }, []);
   return (
-    <View
+    <NavigationContainer
         style={{ flex: 1 }}>
         {userState.userLogged  && <IndexTabs />}
         {!userState.userLogged && <LoginStack />}
-    </View>
+    </NavigationContainer>
   );
 };

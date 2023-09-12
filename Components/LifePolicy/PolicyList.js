@@ -1,17 +1,18 @@
 import React from 'react'
-import { ActivityIndicator, FlatList, RefreshControl, View } from 'react-native';
-import { ButtonGroup, Divider, Text } from '@rneui/themed';
+import { ActivityIndicator, FlatList, RefreshControl, View, Platform } from 'react-native';
+import { ButtonGroup, Divider, SearchBar } from '@rneui/themed';
 import { doCmd } from '../../util/doCmd'
 import { PolicyItem } from './PolicyItem';
 import { UserContext } from '../../util/UserContext';
 
-const PolicyList = () => {
+const PolicyList = (props) => {
     const [ loading, setLoading ] = React.useState(false);
     const [ refresh, setRefresh ] = React.useState(false);
     const [ index, setIndex ] = React.useState(0);
     const [ list, setList ] = React.useState([]);
     const [ page, setPage ] = React.useState();
     const [ noData, setNoData ] = React.useState(false);
+    const [ search, updateSearch ] = React.useState('');
     const limit = 20;
     //  Get Contact Id
     const { state: { contact: { id }}} = React.useContext(UserContext)
@@ -23,15 +24,20 @@ const PolicyList = () => {
             setRefresh(false)
         }, 2000);
 
-    })
+    });
+
     const GetInitialData = async()=>{
         setLoading(true);
         setList([]);
         setNoData(false);
         try {
-            const newFilter = index == 0 ? `holderId=${ id }` :
+            let newFilter = index == 0 ? `holderId=${ id }` :
                               index == 1 ? `id in (SELECT lifePolicyId from Insured where contactId=${ id })` :
                               `id in (SELECT lifePolicyId from beneficiary where contactId=${ id })`;
+            newFilter += ' AND active=1';
+            if(search && search != null)
+                newFilter += ` AND code LIKE '%${ search }%'`;
+
             const response = await doCmd({ cmd:'RepoLifePolicy', data:{ operation:'GET',page: 0, size: limit, filter: newFilter, noTracking: true,include:['Insureds'] }});
             setList(response.outData);
         } catch (error) {
@@ -48,9 +54,12 @@ const PolicyList = () => {
         try {
             setLoading(true);
             const newPage = page + 1;
-            const newFilter = index == 0 ? `holderId=${ id }` :
+            let newFilter = index == 0 ? `holderId=${ id }` :
                               index == 1 ? `id in (SELECT lifePolicyId from insured where contactId=${ id })` :
                               `id in (SELECT lifePolicyId from beneficiary where contactId=${ id })`;
+            newFilter += ' AND active=1';
+            if(search && search != null)
+                newFilter += ` AND code LIKE '%${ search }%'`;
             const response = await doCmd({ cmd:'RepoLifePolicy', data:{ operation:'GET', page: newPage, size: limit, filter: newFilter, noTracking: true, include:['Insureds'] }});
 
             if(response.outData.length > 0){
@@ -71,9 +80,21 @@ const PolicyList = () => {
         GetInitialData();
         setPage(0);
     }, [ index ]);
+    // Configure Search
+    React.useEffect(()=>{
+        const updateQuery = setTimeout(() => {
+            GetInitialData()
+        }, 1500);
+        return ()=> clearTimeout(updateQuery);
+    },[ search ]);
+
 
     return <View style={{ flex: 1 }}>
-        <Text h5 >Search by: </Text>
+        <SearchBar 
+            placeholder='Type a policy code' 
+            onChangeText={ newValue => updateSearch(newValue) } 
+            value={ search }
+            platform={ Platform.OS }/>
          <ButtonGroup
              buttons={['Policyholder', 'Insured', 'Beneficiary']}
              selectedIndex={ index }
@@ -83,11 +104,11 @@ const PolicyList = () => {
         <FlatList
             data={ list }
             keyExtractor={ item => item.id.toString() }
-            renderItem={ ({ item }) => <PolicyItem { ...item } /> }
+            renderItem={ ({ item }) => <PolicyItem { ...item  } /> }
             onEndReachedThreshold={0.1}
             onEndReached={ GetMorePolicies }
             refreshControl={ <RefreshControl onRefresh={ onRefresh } refreshing={ refresh }/> }
-            ListFooterComponent={ ()=> { return (loading ? <ActivityIndicator color='rgb(0, 120, 212)' /> : null )}}
+            ListFooterComponent={ ()=> { return (loading  && !refresh ? <ActivityIndicator color='rgb(0, 120, 212)' /> : null )}}
         />
     </View>
 }
