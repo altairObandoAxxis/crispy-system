@@ -4,7 +4,7 @@
     "slug": "sis11mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/sisIcon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,10 +15,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "config": {
-        "usesNonExemptEncryption": false
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -35,6 +32,12 @@
         "projectId": "01ce9ae9-71e4-431e-812e-636b85a2e5ad"
       }
     },
-    "owner": "altair_obando"
+    "owner": "altair_obando",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/01ce9ae9-71e4-431e-812e-636b85a2e5ad"
+    }
   }
 }
