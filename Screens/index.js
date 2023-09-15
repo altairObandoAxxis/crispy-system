@@ -6,6 +6,7 @@ import { LoginStack    } from './Login/index'
 import { IndexTabs     } from './Home';
 import { GetContact } from '../commands/Contact';
 import { NavigationContainer } from '@react-navigation/native';
+import { NoContact } from '../Components/Account/NoContact';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -34,11 +35,14 @@ export const IndexStack = () => {
     }
     loadApp();
   }, []);
-  return (
-    <NavigationContainer
-        style={{ flex: 1 }}>
-        {userState.userLogged  && <IndexTabs />}
-        {!userState.userLogged && <LoginStack />}
+  if(!userState.userLogged)
+    return <NavigationContainer style={{ flex: 1 }}>
+      <LoginStack />
     </NavigationContainer>
-  );
+  if(userState.contact)
+  return <NavigationContainer style={{ flex: 1 }}>
+    <IndexTabs />
+  </NavigationContainer>
+
+  return <NoContact />
 };
