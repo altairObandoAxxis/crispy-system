@@ -1,11 +1,15 @@
 import React from 'react';
 import PolicyList from './PolicyList';
-import { PolicyDetails } from './PolicyDetails';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Coverages } from './Coverages';
+
+
+const PolicyStack = createNativeStackNavigator();
+
 
 export const Index = () => {
-  return <SafeAreaProvider>
-    <PolicyList />
-    <PolicyDetails />
-  </SafeAreaProvider>
+  return <PolicyStack.Navigator>
+    <PolicyStack.Screen name='PolicyList' component={ PolicyList } options={{ headerShown: false }} />
+    <PolicyStack.Screen name='Coverages'  component={ Coverages } />
+  </PolicyStack.Navigator>
 }
