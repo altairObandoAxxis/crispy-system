@@ -4,6 +4,10 @@
   },
   "build": {
     "localApk":{
+      "env":{
+        "EXPO_PUBLIC_SIS11API": "https://sisos-eu.azurewebsites.net/api/cmd",
+        "EXPO_PUBLIC_SIS11LOG": "https://sisos-eu.azurewebsites.net/api/pub/authenticate"
+      },
       "android": {
         "buildType": "apk"
       }
@@ -15,7 +19,12 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "env":{
+        "EXPO_PUBLIC_SIS11API": "https://sisos-eu.azurewebsites.net/api/cmd",
+        "EXPO_PUBLIC_SIS11LOG": "https://sisos-eu.azurewebsites.net/api/pub/authenticate"
+      }
+    }
   },
   "submit": {
     "production": {}
