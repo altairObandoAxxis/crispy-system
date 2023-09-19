@@ -18,7 +18,7 @@ export const PolicyItem =({ policy, navigation })=> {
         <ListItem key={ policy.id } bottomDivider>
             <Icon name={ icon } type='material-community' color={ color } />
             <Content>
-                <Title> { policy.id  + ' -  '+ policy.code } </Title>
+                <Title> { policy.id  + ' -  '+ (policy.code || 'DRAFT') } </Title>
                 <Subtitle>{`${ policy?.MainInsured?.name ?? policy.Holder.FullName }  - ${ formatDate(policy.start)} to ${formatDate(policy.end)}`}</Subtitle>
             </Content>
         </ListItem>

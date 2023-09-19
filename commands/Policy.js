@@ -20,6 +20,6 @@ export const GetIncomePayments = async policyId=>{
 }
 
 export const GetDocuments = async policyId=>{
-    const response = await doCmd({ cmd:'LoadEntities', data:{ entity:'PayPlan', filter:`lifePolicyId=${ policyId }`}});
+    const response = await doCmd({ cmd:'LoadEntities', data:{ entity:'Document', filter:`lifePolicyId=${ policyId }`}});
     return response.outData;
 }

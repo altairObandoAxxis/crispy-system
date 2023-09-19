@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { RefreshControl, ScrollView } from 'react-native';
+import { RefreshControl, ScrollView, TouchableOpacity } from 'react-native';
 import { GetRequirements } from '../../commands/Policy';
-import { ListSkeleton } from '../Util/ListSkeleton';
 import { Icon, ListItem, lightColors } from '@rneui/themed';
 
 const { Content, Subtitle, Title, Chevron } = ListItem;
@@ -27,14 +26,16 @@ export const Requirements = ({ navigation, route }) => {
         LoadItems();
     },[ policyId]);
 
-    const RenderItem = item => <ListItem key={ item.id }>
-        <Icon name={ item.response ? 'check-circle' : 'warning'  } type='antd' color='grey' />
-        <Content>
-            <Title>{ item.name }</Title>
-            <Subtitle>{ item.code }</Subtitle>
-        </Content>
-        <Chevron color={ item.response ? lightColors.success : lightColors.warning } />
-    </ListItem>
+    const RenderItem = item => <TouchableOpacity key={ item.id }>
+        <ListItem>
+            <Icon name={ item.response ? 'check-circle' : 'warning'  } type='antd' color='grey' />
+            <Content>
+                <Title>{ item.name }</Title>
+                <Subtitle>{ item.code }</Subtitle>
+            </Content>
+            <Chevron color={ item.response ? lightColors.success : lightColors.warning } />
+        </ListItem>
+    </TouchableOpacity>
   return <ScrollView  style={{ display: 'flex' }} refreshControl={ <RefreshControl  refreshing={ loading } onRefresh={ LoadItems }/>} >
     { items.map( item => RenderItem(item)) }
 

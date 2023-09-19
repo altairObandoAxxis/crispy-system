@@ -19,6 +19,9 @@ export const PolicyItemDetails =({ showActionSheetWithOptions, policy, navigatio
               case 1:
                 navigation.navigate('Requirement', { policyId: policy.id });
                 break;
+              case 2:
+                navigation.navigate('Document', { policyId: policy.id });
+                break;
       
               case destructiveButtonIndex:
                 // Delete
