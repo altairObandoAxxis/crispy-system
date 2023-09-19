@@ -57,7 +57,7 @@ export const GetDashboarData = async ( contactId, navigation )=>{
             price: formatNumber(Number(polData.Total)),
             total: polData.totalHolderPol,
             info: [`${formatNumber(Number(polData.totalHolderPol))} as Holder`, `${formatNumber(Number(polData.totalInsuredPol))} as Insured`,`${ formatNumber(Number(polData.totalBenePol))} as Beneficiary`] ,
-            onButtonPress: ()=> navigation.navigate('Policies'),
+            onButtonPress: ()=> navigation.navigate('Policies', { screen: 'PolicyList' }),
             button: { title:'Check', icon: 'shield' }
         },
         { 

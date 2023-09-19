@@ -12,7 +12,7 @@ const styles = {
     title: { display:'flex', flexDirection:'row', alignItems:'center' }
 }
 
-export const NoContact = () => {
+export const NoContact = ({ navigation }) => {
     const [ visible, setVisible ] = useState(false);
     const [ contactId, setContactId ] = useState();
     const [ loading, setLoading ] = useState(false);
@@ -23,6 +23,11 @@ export const NoContact = () => {
     const closeSession = ()=>{
         logout();
         setUserData({});
+    }
+    const GoToHome =()=>{
+       if(!navigation)
+        return;
+       navigation.navigate('Home');
     }
     const onChangeContactPress = async ()=>{
         setError(null);
@@ -38,6 +43,8 @@ export const NoContact = () => {
             if(!userContact)
                 throw 'An error has occurred by linking the use to the user';
             setUserData( current => ({...current, contact: userContact }));
+            GoToHome();
+            setVisible(false);
         } catch (error) {
             setError(error);
         }finally{

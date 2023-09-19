@@ -13,15 +13,13 @@ export const PolicyItem =({ policy, navigation })=> {
     const icon  = policy.inactiveDate != null ?'heart-off': policy.activeDate != null ?'heart': 'heart-off-outline';
     
     const onItemPress = ( )=> PolicyItemDetails({ showActionSheetWithOptions, policy, navigation });
-
-
-
+    
     return <TouchableOpacity onPress={ onItemPress } >
         <ListItem key={ policy.id } bottomDivider>
             <Icon name={ icon } type='material-community' color={ color } />
             <Content>
-                <Title> { policy.code } </Title>
-                <Subtitle>{`${ policy.MainInsured.name }  - ${ formatDate(policy.start)} to ${formatDate(policy.end)}`}</Subtitle>
+                <Title> { policy.id  + ' -  '+ policy.code } </Title>
+                <Subtitle>{`${ policy?.MainInsured?.name ?? policy.Holder.FullName }  - ${ formatDate(policy.start)} to ${formatDate(policy.end)}`}</Subtitle>
             </Content>
         </ListItem>
     </TouchableOpacity>

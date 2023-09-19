@@ -14,10 +14,10 @@ export const PolicyItemDetails =({ showActionSheetWithOptions, policy, navigatio
           }, (selectedIndex ) => {
             switch (selectedIndex) {
               case 0:
-                navigation.navigate('Coverages', { Coverages: policy.Coverages, currency: policy.currency } );
+                navigation.navigate('Coverages', { policyId: policy.id, currency: policy.currency } );
                 break;
               case 1:
-                Alert.alert('Searching claims for policy ' + policy.id );
+                navigation.navigate('Requirement', { policyId: policy.id });
                 break;
       
               case destructiveButtonIndex:

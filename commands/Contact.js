@@ -8,6 +8,8 @@ export const GetContact = async ()=>{
 }
 
 export const SetContact = async( userEmail, contactId ) =>{
+    // Remove from another contact
+    await doCmd({cmd:'DoQuery',data:{ sql:`UPDATE Contact SET [user]=NULL WHERE [user] LIKE '${ userEmail }'`}});
     // Check if contact has no other assigned user
     const hasUserResponse = await doCmd({cmd:'LoadEntity', data:{ entity:'Contact',filter:`id=${ contactId }`, fields:'id, [user] currentUser' }});
     // Validate contact exists
@@ -15,7 +17,7 @@ export const SetContact = async( userEmail, contactId ) =>{
         throw `Contact with ID ${ contactId } does not exist in the system`;
 
     const { outData:{ id, currentUser }} = hasUserResponse;
-    console.log(currentUser)
+    
     if(currentUser != null)
         throw `Contact with ID ${ id } currently has the user ${ currentUser }`;
 

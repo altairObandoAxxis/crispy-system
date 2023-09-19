@@ -19,7 +19,7 @@ export const IndexStack = () => {
     const user  = await getUserInfo();
     const contact = await GetContact();
     const logged = !(typeof token === 'undefined' || token === null || !token);
-    setData({ userLogged: logged, user, contact });
+    setData(current => ({...current, userLogged: logged, user, contact }));
   };
 
   // Show splash art
@@ -30,19 +30,20 @@ export const IndexStack = () => {
       } catch (error) {
         console.warn(error);
       } finally {
-        await SplashScreen.hideAsync();
+        setTimeout( ()=> SplashScreen.hideAsync(), 1000);
       }
     }
     loadApp();
-  }, []);
+  }, [ userState?.contact?.id ?? false ]);
+
   if(!userState.userLogged)
     return <NavigationContainer style={{ flex: 1 }}>
       <LoginStack />
     </NavigationContainer>
   if(userState.contact)
-  return <NavigationContainer style={{ flex: 1 }}>
-    <IndexTabs />
-  </NavigationContainer>
+    return <NavigationContainer style={{ flex: 1 }}>
+      <IndexTabs />
+    </NavigationContainer>
 
   return <NoContact />
 };
