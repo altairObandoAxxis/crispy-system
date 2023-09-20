@@ -1,4 +1,3 @@
-import { Alert } from "react-native";
 import ItemConfig from "./ItemConfig"
 
 export const PolicyItemDetails =({ showActionSheetWithOptions, policy, navigation })=>{
@@ -21,6 +20,10 @@ export const PolicyItemDetails =({ showActionSheetWithOptions, policy, navigatio
                 break;
               case 2:
                 navigation.navigate('Document', { policyId: policy.id });
+                break;
+              case 3:
+                console.log(selectedIndex);
+                navigation.navigate('Payments', { policyId: policy.id });
                 break;
       
               case destructiveButtonIndex:

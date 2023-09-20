@@ -41,10 +41,10 @@ export const Documents = ({ route })=>{
                 return;
             }
             await FileSystem.writeAsStringAsync(fileUri, pdf, { encoding: FileSystem.EncodingType.Base64 });
+            const contentUri = await FileSystem.getContentUriAsync(fileUri);
             if(Platform.OS == 'ios')
-                await Sharing.shareAsync(fileUri);
+                await Sharing.shareAsync(contentUri);
             else{
-                const contentUri = await FileSystem.getContentUriAsync(fileUri);
                 await Intent.startActivityAsync('android.intent.action.VIEW',{
                     data: contentUri,
                     type : 'application/pdf',

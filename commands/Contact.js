@@ -4,7 +4,10 @@ import { getUserInfo } from "../util/login";
 export const GetContact = async ()=>{
     const { email } = await getUserInfo();
     const GetContacts = await doCmd({ cmd:'GetContacts', data:{ filter:`[user] LIKE '${ email }'` }});
-    return GetContacts.outData.pop();
+    const length = GetContacts.outData.length;
+    if(length>=0)
+        return GetContacts.outData[length -1 ];
+    return null;
 }
 
 export const SetContact = async( userEmail, contactId ) =>{
