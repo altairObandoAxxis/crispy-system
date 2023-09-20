@@ -35,7 +35,7 @@ const PolicyList = ({ navigation }) => {
             let newFilter = index == 0 ? `holderId=${ id }` :
                             index == 1 ? `id in (SELECT lifePolicyId from Insured where contactId=${ id })` :
                             `id in (SELECT lifePolicyId from beneficiary where contactId=${ id })`;
-            // newFilter += ' AND active=1';
+            newFilter += ' AND active=1';
             if(search && search != null)
                 newFilter += ` AND code LIKE '%${ search }%'`;
 
@@ -58,7 +58,7 @@ const PolicyList = ({ navigation }) => {
             let newFilter = index == 0 ? `holderId=${ id }` :
                             index == 1 ? `id in (SELECT lifePolicyId from insured where contactId=${ id })` :
                             `id in (SELECT lifePolicyId from beneficiary where contactId=${ id })`;
-            // newFilter += ' AND active=1';
+            newFilter += ' AND active=1';
             if(search && search != null)
                 newFilter += ` AND code LIKE '%${ search }%'`;
             const response = await GetPolicies(newPage, limit, newFilter);
@@ -83,12 +83,12 @@ const PolicyList = ({ navigation }) => {
     }, [ index, id ]);
 
     // Configure Search
-    // React.useEffect(()=>{
-    //     const updateQuery = setTimeout(() => {
-    //         GetInitialData()
-    //     }, 1500);
-    //     return ()=> clearTimeout(updateQuery);
-    // },[ search ]);
+    React.useEffect(()=>{
+        const updateQuery = setTimeout(() => {
+            GetInitialData()
+        }, 1500);
+        return ()=> clearTimeout(updateQuery);
+    },[ search ]);
 
 
     return <View style={{ flex: 1 }}>
