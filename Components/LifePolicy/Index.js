@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Coverages } from './Coverages';
 import { Requirements } from './Requirements';
 import { Documents } from './Documents';
-import { DocumentViewer } from '../Util/DocumentViewer';
 
 
 const PolicyStack = createNativeStackNavigator();
