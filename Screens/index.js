@@ -34,8 +34,8 @@ export const IndexStack = () => {
       }
     }
     loadApp();
-  }, [ userState?.contact?.id ?? false ]);
-
+  }, [ userState.contact ]);
+  
   if(!userState.userLogged)
     return <NavigationContainer style={{ flex: 1 }}>
       <LoginStack />
