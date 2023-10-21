@@ -19,10 +19,10 @@ export const NoContact = ({ navigation }) => {
     const [ error, setError ] =useState(null);
 
     const contactRef = useRef(null);
-    const { state:{ user: { esAdmin, email } }, setData: setUserData } = React.useContext(UserContext);
+    const { state:{ ShowLogin, user: { esAdmin, email } }, setData: setUserData } = React.useContext(UserContext);
     const closeSession = ()=>{
         logout();
-        setUserData({});
+        ShowLogin();
     }
     const GoToHome =()=>{
        if(!navigation)
