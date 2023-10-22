@@ -41,6 +41,7 @@ export const Login =({ navigation })=>{
                 return
             }
             userContext.setData({ userLogged: ok, token, user: userInfo });
+            userContext.state.ShowLogin(true);
         } catch (error) {
             console.warn(error);
         }finally{

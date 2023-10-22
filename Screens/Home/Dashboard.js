@@ -4,23 +4,28 @@ import { RefreshControl, ScrollView } from 'react-native';
 import { GetDashboarData } from '../../commands/Dashboard';
 import { UserContext } from '../../util/UserContext';
 
-const Dashboard = ({ navigation, route }) => {
+const Dashboard = ({ navigation }) => {
     const [ loading, setLoading ] = useState(true);
     const [ data, setData ] = useState([]);
-    const { state: { contact: { id }, sessionId }, setData: setUserData } = React.useContext(UserContext);
+    const { state, setData: setUserData } = React.useContext(UserContext);
 
     const LoadDashboard = async ()=>{
+      const contactId = state?.contact?.id ?? 0;
+      if(contactId == 0)
+        return;
       setLoading(true);
-      const data = await GetDashboarData(id, navigation);
-      if(data.length > 0)
-        setUserData( current => ({...current, totalPolicy: data[0].total, totalPayments: data[1].total, totalClaims: data[2].total }) )
+      const data = await GetDashboarData(contactId, navigation);
+      if(data.length === 0)
+        return;
+      const [ totalPolicy, totalPayments, totalClaims ] = data;
+      setUserData( current => ({...current, totalPolicy, totalPayments, totalClaims }) );
       setData(data);
       setLoading(false);
     }
 
     React.useEffect(()=>{
       LoadDashboard();
-    },[ id || false ]);
+    },[ state?.contact?.id ?? false ]);
     return <ScrollView refreshControl={ <RefreshControl refreshing={ loading } onRefresh={ LoadDashboard }  />  } >
       {data.map( (item, index ) => <PricingCard 
       key={index} 

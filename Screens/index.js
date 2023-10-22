@@ -12,11 +12,13 @@ import { NoContact } from '../Components/Account/NoContact';
 SplashScreen.preventAutoHideAsync();
 export const IndexStack = () => {
   const [ logged, setLogged ] = useState(false);
-  const { state: userState, setData } = useContext(UserContext);
+  const [ userContact, setUserContact ] = useState();
+  const { setData } = useContext(UserContext);
 
-  const ShowLogin = async()=>{
-    await SplashScreen.preventAutoHideAsync();
-    setLogged(false);
+  const ShowLogin = async( logged = false)=>{
+    SplashScreen.preventAutoHideAsync()
+    setLogged(logged);
+    setUserContact(null)
   }
   const validateLogin = async () => {
     const token = await getLoginToken();
@@ -25,7 +27,8 @@ export const IndexStack = () => {
     const user  = await getUserInfo();
     const contact = await GetContact();
     const logged = !(typeof token === 'undefined' || token === null || !token);
-    setData(current => ({...current, user, contact, ShowLogin }));
+    setData(current => ({...current, user, contact, ShowLogin, setUserContact }));
+    setUserContact(contact);
     return logged;
   };
   // Show splash art
@@ -37,17 +40,17 @@ export const IndexStack = () => {
       } catch (error) {
         console.warn(error);
       } finally {
-        setTimeout( ()=> SplashScreen.hideAsync(), 1000);
+        setTimeout( ()=> SplashScreen.hideAsync(), 2000);
       }
     }
     loadApp();
-  }, [ userState.contact ]);
+  }, [ userContact ]);
   
   if(!logged)
     return <NavigationContainer style={{ flex: 1 }}>
       <LoginStack />
     </NavigationContainer>
-  if(userState.contact)
+  if(userContact)
     return <NavigationContainer style={{ flex: 1 }}>
       <IndexTabs />
     </NavigationContainer>

@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { ListItem, Card, Avatar, Icon } from '@rneui/themed'
+import { Card, Text, Icon, Button } from '@rneui/themed'
 import { GetIncomePayments } from '../../commands/Policy';
-import { TouchableOpacity, ScrollView, RefreshControl, View, FlatList } from 'react-native'
-
-
-const { Content, Title } = ListItem;
+import { RefreshControl, View, FlatList } from 'react-native'
+import PaymentSummary from './PaymentSummary';
 
 export const IncomePayments = ({ route }) => {
     const [ items, setItems ]= useState([]);
     const [ loading, setLoading] = useState(true);
     const [ summary, setSummary ] = useState({pending: 0, payed: 0 });
-    const [ selected, setSelected ] = useState([]);
-    const { params: { policyId } } = route;
+    const { params: { policyId, code, currency } } = route;
     const LoadItems = async () =>{
         try {
             setLoading(true);
@@ -33,46 +30,30 @@ export const IncomePayments = ({ route }) => {
     useEffect(()=>{
         LoadItems();
     },[ policyId]);
-    const today = new Date();
-    const onItemSelected = item =>{
-        if(selected.some(sel => sel.id == item.id)){
-            setSelected( current => [...current.filter(i => i.id != item.id)]);
-        }else{
-            setSelected( current => [...current, item ]);
-        }
-    }
 
-    const RenderItem = ({item}) => <ListItem bottomDivider Component={ TouchableOpacity } key={ item.id }>
-            <Icon 
-                name='calendar' 
-                type='material-community'
-                color={ item.payed > 0 ? 'green': new Date(item.dueDate) <= today? 'red': 'black' } />
-            <Content>
-                <Title>{ Number(item.minimum || 0 ).toLocaleString('en-us') }</Title>
-                <ListItem.Subtitle> Concept { item.concept }</ListItem.Subtitle>
-                <ListItem.Subtitle> Due date { new Date(item.dueDate).toLocaleDateString() } </ListItem.Subtitle>
-            </Content>
-            <ListItem.CheckBox 
-                checked={ item.payed >0 || selected.some( sel => sel.id == item.id) }
-                onPress={ ()=> { onItemSelected(item) }}
-                 />
-        </ListItem>
-    
+    const RenderItem = (item)=> <Card key={item.id} containerStyle={{ borderRadius: 15 }}>
+        <View style={{ flexDirection:'row', justifyContent:'space-between'}}>
+            <Text>{ item.concept }</Text>
+            <Text>{ currency } { Number(item.minimum || 0 ).toLocaleString('en-us') }</Text>
+        </View>
+        <View style={{ flexDirection:'row', justifyContent:'space-between'}}>
+            <View>
+                <Text style={{ color: 'gray'}}>Due date { new Date(item.dueDate).toLocaleDateString() }</Text>
+                { item.payedDate && item.payedDate != null && <Text style={{ color: 'gray'}}>Pay date { new Date(item.payedDate).toLocaleDateString() }</Text>}
+            </View>
+            <Button type='clear'> <Icon type='antd' name='payment' color={ Number(item.payed) ? 'green': 'red'}/></Button>
+        </View>
+    </Card>
 
-  return <View>
-    <Card containerStyle={{ maxHeight: '15%'}}>
-        <Card.Title>Pending Amount $ { summary.pending.toLocaleString() } </Card.Title>
-    </Card>
-    <Card containerStyle={{ maxHeight: '70%' }}>
-        <FlatList 
-         data={ items }
-         keyExtractor={ item => item.id }
-         renderItem={ RenderItem }
-         refreshControl={<RefreshControl onRefresh={ LoadItems } refreshing={loading} />}
-        />
-    </Card>
-    <Card containerStyle={{ maxHeight: 'auto' }} >
-        <Card.Title> Payed Amount  </Card.Title>
-    </Card>
+  return <View style={{ display:'flex'}}>
+    <PaymentSummary totalPayed={ summary.payed } totalPending={ summary.pending } code={ code } currency={ currency } />
+    <View style={{ maxHeight: 600 }}>
+        <FlatList
+                data={ items }
+                keyExtractor={ item => item.id }
+                renderItem={ ({item}) =>  RenderItem(item) }
+                refreshControl={<RefreshControl onRefresh={ LoadItems } refreshing={loading} />}
+                />
+        </View>     
     </View>
 }

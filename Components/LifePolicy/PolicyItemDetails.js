@@ -22,8 +22,7 @@ export const PolicyItemDetails =({ showActionSheetWithOptions, policy, navigatio
                 navigation.navigate('Document', { policyId: policy.id });
                 break;
               case 3:
-                console.log(selectedIndex);
-                navigation.navigate('Payments', { policyId: policy.id });
+                navigation.navigate('Payments', { policyId: policy.id, currency: policy.currency, code: policy.code });
                 break;
       
               case destructiveButtonIndex:

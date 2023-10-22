@@ -43,8 +43,9 @@ export const NoContact = ({ navigation }) => {
             if(!userContact)
                 throw 'An error has occurred by linking the use to the user';
             setUserData( current => ({...current, contact: userContact }));
-            GoToHome();
-            setVisible(false);
+            state.setUserContact(userContact);
+            // GoToHome();
+            // setVisible(false);
         } catch (error) {
             setError(error);
         }finally{
